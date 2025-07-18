@@ -34,7 +34,7 @@ public class OllamaChat {
         for (var question : questions) {
             context.addRequestMessage(question);
             System.out.println("  Context: " + context);
-            var response = sendRequest(context.getData());
+            var response = sendRequest(context.createChatRequest());
             responses.add(response);
             context.addResponseMessage(response.message().content());
         }
@@ -62,10 +62,12 @@ public class OllamaChat {
     public static void main(String[] args) {
         var ollamaChat = new OllamaChat();
 
-        var responses = ollamaChat.chat("llama3.2", List.of("What is the capital of France?", "And Sweden?"));
-        responses.forEach(System.out::println);
+        var responsesWithoutContext = ollamaChat.chat("llama3.2", List.of("What is the capital of France?", "And Sweden?"));
+        System.out.println("Responses without context:");
+        responsesWithoutContext.forEach(System.out::println);
 
-        responses = ollamaChat.chatWithContext("llama3.2", List.of("What is the capital of France?", "And Sweden?"));
-        responses.forEach(System.out::println);
+        System.out.println("\nResponses with context:");
+        var responsesWithContext = ollamaChat.chatWithContext("llama3.2", List.of("What is the capital of France?", "And Sweden?"));
+        responsesWithContext.forEach(System.out::println);
     }
 }
